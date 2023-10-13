@@ -19,12 +19,11 @@ function ChatComponent() {
     return `${hours}:${minutes}`;
   };
   useEffect(() => {
-    if (markerDivRef.current && autoScroll) {
-      
-      markerDivRef.current.scrollIntoView({ behavior: 'smooth' });
+    if (scrollableDivRef.current && autoScroll) {
+      // Scroll to the bottom when autoScroll is true
+      scrollableDivRef.current.scrollTop = scrollableDivRef.current.scrollHeight || 0;
     }
-  }, [chatData]);
- 
+  }, [chatData, autoScroll]);
   const fetchData = async () => {
     if (isLoading || apiCallCounter >= maxApiCalls) {
       return;
@@ -82,7 +81,7 @@ function ChatComponent() {
   }, []);
 
   return (
-    <div ref={scrollableDivRef} style={{ maxHeight: 'calc(100vh - 280px)', overflowY: 'auto'}}>
+    <div ref={scrollableDivRef} style={{ maxHeight: 'calc(100vh - 280px)'}} className="no-scrollbar overflow-y-auto">
        
       <div className="divide-y divide-solid">
         {chatData ? (
@@ -108,7 +107,7 @@ function ChatComponent() {
                         {chat.message}
                        
                       </div>
-                      <div className={`${chat.sender.self?'text-white':'text-zinc-600'} text-sm mr-0`}>{formatTime(chat.time)}</div>
+                      {/* <div className={`${chat.sender.self?'text-white':'text-zinc-600'} text-sm mr-0`}>{formatTime(chat.time)}</div> */}
                     </div>
                     
               </div>
