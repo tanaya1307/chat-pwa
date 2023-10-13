@@ -10,7 +10,7 @@ export const mockData: ChatApiResponse = {
           self: false,
           user_id: 'user1',
         },
-        time: "2023-10-13 10:13:52",
+        time: "",
       },
       {
         id: '2',
@@ -21,7 +21,7 @@ export const mockData: ChatApiResponse = {
           self: true,
           user_id: 'user2',
         },
-        time: "2023-10-13 10:20:52",
+        time: "",
       },
       {
         id: '21',
@@ -32,7 +32,7 @@ export const mockData: ChatApiResponse = {
           self: true,
           user_id: 'user2',
         },
-        time: "2023-10-13 10:20:52",
+        time: "",
       },  {
         id: '3',
         message: 'Connect with fellow travelers, share the ride and save money Connect with fellow travelers, share the ride and save money',
@@ -42,7 +42,7 @@ export const mockData: ChatApiResponse = {
           self: true,
           user_id: 'user2',
         },
-        time: "2023-10-13 10:30:52",
+        time: "",
       },  {
         id: '4',
         message: 'Connect with fellow travelers, share the ride and save money Connect with fellow travelers, share the ride and save money',
@@ -52,7 +52,7 @@ export const mockData: ChatApiResponse = {
           self: true,
           user_id: 'user2',
         },
-        time: "2023-10-13 10:33:52",
+        time: "",
       },
       {
         id: '5',
@@ -63,7 +63,7 @@ export const mockData: ChatApiResponse = {
           self: false,
           user_id: 'user2',
         },
-        time: "2023-10-13 10:33:52",
+        time: "",
       },
       {
         id: '6',
@@ -74,7 +74,7 @@ export const mockData: ChatApiResponse = {
           self: false,
           user_id: 'user2',
         },
-        time: "2023-10-13 10:34:52",
+        time: "",
       }
       // Add more initial mock chat messages here
     ],

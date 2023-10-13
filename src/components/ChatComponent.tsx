@@ -1,4 +1,4 @@
-import { Avatar} from '@chakra-ui/react';
+ import { Avatar} from '@chakra-ui/react';
 import React, { useEffect, useState,useRef } from 'react';
 import verified from '../assets/check-verified-02.svg';
 import { ChatApiResponse } from '../interfaces/ChatInterface';
@@ -8,8 +8,15 @@ function ChatComponent() {
   const [chatData, setChatData] = useState<ChatApiResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [apiCallCounter, setApiCallCounter] = useState(0);
+  const [prevDate, setPrevDate] = useState<string | null>(null);
   const scrollableDivRef = useRef<HTMLDivElement | null>(null);
-  const maxApiCalls =3; // maximum API call count
+  const maxApiCalls =1; // maximum API call count
+  const formatTime = (timeString:any) => {
+    const date = new Date(timeString);
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    return `${hours}:${minutes}`;
+  };
   
  
   const fetchData = async () => {
@@ -75,7 +82,9 @@ function ChatComponent() {
       <div className="divide-y divide-solid">
         {chatData ? (
           <ul>
-            {chatData.chats.map((chat) => (
+         {chatData.chats
+      .sort((a, b) => (new Date(a.time).getTime() - new Date(b.time).getTime())) // Sort by time
+      .map((chat) => (
               <li key={chat.id}>
                  <div className="w-fit h-fit justify-start items-start gap-2 inline-flex m-2">
                     <div className="w-fit h-fit relative mt-1 mr-7">
@@ -92,8 +101,11 @@ function ChatComponent() {
                     <div className="h-inherit w-full flex-col justify-start items-start gap-2 flex">
                       <div className={`self-stretch ${chat.sender.self?'text-white':'text-zinc-600'} text-sm font-normal font-['Mulish'] p-2`}>
                         {chat.message}
+                       
                       </div>
+                      <div className={`${chat.sender.self?'text-white':'text-zinc-600'} text-sm mr-0`}>{formatTime(chat.time)}</div>
                     </div>
+                    
               </div>
            </div>       
               </li>
