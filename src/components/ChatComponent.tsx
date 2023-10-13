@@ -8,6 +8,7 @@ function ChatComponent() {
   const [chatData, setChatData] = useState<ChatApiResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [apiCallCounter, setApiCallCounter] = useState(0);
+  const [autoScroll, setAutoScroll] = useState(true);
   const markerDivRef = useRef<HTMLDivElement>(null);
   const scrollableDivRef = useRef<HTMLDivElement | null>(null);
   const maxApiCalls =2; // maximum API call count
@@ -18,7 +19,7 @@ function ChatComponent() {
     return `${hours}:${minutes}`;
   };
   useEffect(() => {
-    if (markerDivRef.current) {
+    if (markerDivRef.current && autoScroll) {
       
       markerDivRef.current.scrollIntoView({ behavior: 'smooth' });
     }
@@ -39,6 +40,7 @@ function ChatComponent() {
       setChatData((prevData) => ({
         chats: [...data.chats, ...(prevData?.chats || [])],
       }));
+      setAutoScroll(false)
       setApiCallCounter(apiCallCounter + 1);
     } catch (error) {
       console.error('Error fetching chat data:', error);
@@ -64,10 +66,7 @@ function ChatComponent() {
     if (scrollableDivRef.current) {
       scrollableDivRef.current.addEventListener('scroll', handleScroll);
 
-      // Scroll to the bottom when the page first renders
-      if(apiCallCounter===0)
-      scrollableDivRef.current.scrollTop = scrollableDivRef.current.scrollHeight-scrollableDivRef.current.clientHeight;
-      console.log(scrollableDivRef.current.scrollTop+1)
+   
     }
 
     return () => {
@@ -79,6 +78,7 @@ function ChatComponent() {
 
   useEffect(() => {
     setChatData(mockData);
+    
   }, []);
 
   return (
