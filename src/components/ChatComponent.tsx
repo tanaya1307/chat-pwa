@@ -1,111 +1,23 @@
-import { Avatar, AvatarGroup } from '@chakra-ui/react';
+import { Avatar} from '@chakra-ui/react';
 import React, { useEffect, useState,useRef } from 'react';
 import verified from '../assets/check-verified-02.svg';
-
-interface Chat {
-  id: string;
-  message: string;
-  sender: {
-    image: string;
-    is_kyc_verified: boolean;
-    self: boolean;
-    user_id: string;
-  };
-  time: string;
-}
-
-interface ChatApiResponse {
-  chats: Chat[];
-}
+import { ChatApiResponse } from '../interfaces/ChatInterface';
+import { mockData } from '../mock/mockChatData';
 
 function ChatComponent() {
   const [chatData, setChatData] = useState<ChatApiResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [apiCallCounter, setApiCallCounter] = useState(0);
+  
   const scrollableDivRef = useRef<HTMLDivElement | null>(null);
   const maxApiCalls =3; // maximum API call count
-
-  const mockData: ChatApiResponse = {
-    chats: [
-      {
-        id: '1',
-        message: 'Connect with fellow travelers, share the ride and save money Connect with fellow travelers, share the ride and save money',
-        sender: {
-          image: 'user1.jpg',
-          is_kyc_verified: true,
-          self: false,
-          user_id: 'user1',
-        },
-        time: '12:00 PM',
-      },
-      {
-        id: '2',
-        message: 'Connect with fellow travelers, share the ride and save money Connect with fellow travelers, share the ride and save money',
-        sender: {
-          image: 'user2.jpg',
-          is_kyc_verified: false,
-          self: true,
-          user_id: 'user2',
-        },
-        time: '12:05 PM',
-      },
-      {
-        id: '2',
-        message: 'Connect with fellow travelers, share the ride and save money Connect with fellow travelers, share the ride and save money',
-        sender: {
-          image: 'user2.jpg',
-          is_kyc_verified: false,
-          self: true,
-          user_id: 'user2',
-        },
-        time: '12:05 PM',
-      },  {
-        id: '3',
-        message: 'Connect with fellow travelers, share the ride and save money Connect with fellow travelers, share the ride and save money',
-        sender: {
-          image: 'user2.jpg',
-          is_kyc_verified: false,
-          self: true,
-          user_id: 'user2',
-        },
-        time: '12:05 PM',
-      },  {
-        id: '4',
-        message: 'Connect with fellow travelers, share the ride and save money Connect with fellow travelers, share the ride and save money',
-        sender: {
-          image: 'user2.jpg',
-          is_kyc_verified: false,
-          self: true,
-          user_id: 'user2',
-        },
-        time: '12:05 PM',
-      },
-      {
-        id: '5',
-        message: 'Connect with fellow travelers, share the ride and save money Connect with fellow travelers, share the ride and save money',
-        sender: {
-          image: 'user2.jpg',
-          is_kyc_verified: false,
-          self: false,
-          user_id: 'user2',
-        },
-        time: '12:05 PM',
-      },
-      {
-        id: '6',
-        message: 'Connect with fellow travelers, share the ride and save money Connect with fellow travelers, share the ride and save money',
-        sender: {
-          image: 'user2.jpg',
-          is_kyc_verified: false,
-          self: false,
-          user_id: 'user2',
-        },
-        time: '12:05 PM',
-      }
-      // Add more initial mock chat messages here
-    ],
+  const formatTime = (timeString:any) => {
+    const date = new Date(timeString);
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    return `${hours}:${minutes}`;
   };
-
+  
  
   const fetchData = async () => {
     if (isLoading || apiCallCounter >= maxApiCalls) {
@@ -137,7 +49,7 @@ function ChatComponent() {
 
     const { scrollTop, scrollHeight, clientHeight } = scrollableDivRef.current;
 
-    if (scrollTop < 10)  {
+    if (scrollTop <=0)  {
       fetchData();
     }
   };
@@ -148,7 +60,9 @@ function ChatComponent() {
       scrollableDivRef.current.addEventListener('scroll', handleScroll);
 
       // Scroll to the bottom when the page first renders
+      if(apiCallCounter===0)
       scrollableDivRef.current.scrollTop = scrollableDivRef.current.scrollHeight;
+      console.log(scrollableDivRef.current.scrollTop+1)
     }
 
     return () => {
@@ -163,12 +77,14 @@ function ChatComponent() {
   }, []);
 
   return (
-    <div ref={scrollableDivRef} style={{ maxHeight: 'calc(100vh - 280px)', overflowY: 'auto' }}>
+    <div ref={scrollableDivRef} style={{ maxHeight: 'calc(100vh - 280px)', overflowY: 'auto'}}>
        
       <div className="divide-y divide-solid">
         {chatData ? (
           <ul>
-            {chatData.chats.map((chat) => (
+         {chatData.chats
+      .sort((a, b) => (new Date(a.time).getTime() - new Date(b.time).getTime())) // Sort by time
+      .map((chat) => (
               <li key={chat.id}>
                  <div className="w-fit h-fit justify-start items-start gap-2 inline-flex m-2">
                     <div className="w-fit h-fit relative mt-1 mr-7">
@@ -185,8 +101,11 @@ function ChatComponent() {
                     <div className="h-inherit w-full flex-col justify-start items-start gap-2 flex">
                       <div className={`self-stretch ${chat.sender.self?'text-white':'text-zinc-600'} text-sm font-normal font-['Mulish'] p-2`}>
                         {chat.message}
+                       
                       </div>
+                      <div className={`${chat.sender.self?'text-white':'text-zinc-600'} text-sm mr-0`}>{formatTime(chat.time)}</div>
                     </div>
+                    
               </div>
            </div>       
               </li>
