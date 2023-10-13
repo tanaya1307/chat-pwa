@@ -8,15 +8,8 @@ function ChatComponent() {
   const [chatData, setChatData] = useState<ChatApiResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [apiCallCounter, setApiCallCounter] = useState(0);
-  
   const scrollableDivRef = useRef<HTMLDivElement | null>(null);
   const maxApiCalls =3; // maximum API call count
-  const formatTime = (timeString:any) => {
-    const date = new Date(timeString);
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    return `${hours}:${minutes}`;
-  };
   
  
   const fetchData = async () => {
@@ -61,7 +54,7 @@ function ChatComponent() {
 
       // Scroll to the bottom when the page first renders
       if(apiCallCounter===0)
-      scrollableDivRef.current.scrollTop = scrollableDivRef.current.scrollHeight;
+      scrollableDivRef.current.scrollTop = scrollableDivRef.current.scrollHeight+5;
       console.log(scrollableDivRef.current.scrollTop+1)
     }
 
@@ -82,9 +75,7 @@ function ChatComponent() {
       <div className="divide-y divide-solid">
         {chatData ? (
           <ul>
-         {chatData.chats
-      .sort((a, b) => (new Date(a.time).getTime() - new Date(b.time).getTime())) // Sort by time
-      .map((chat) => (
+            {chatData.chats.map((chat) => (
               <li key={chat.id}>
                  <div className="w-fit h-fit justify-start items-start gap-2 inline-flex m-2">
                     <div className="w-fit h-fit relative mt-1 mr-7">
@@ -101,11 +92,8 @@ function ChatComponent() {
                     <div className="h-inherit w-full flex-col justify-start items-start gap-2 flex">
                       <div className={`self-stretch ${chat.sender.self?'text-white':'text-zinc-600'} text-sm font-normal font-['Mulish'] p-2`}>
                         {chat.message}
-                       
                       </div>
-                      <div className={`${chat.sender.self?'text-white':'text-zinc-600'} text-sm mr-0`}>{formatTime(chat.time)}</div>
                     </div>
-                    
               </div>
            </div>       
               </li>

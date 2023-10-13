@@ -1,6 +1,6 @@
 import ChatHeader from "./components/ChatHeader";
 import ChatInput from "./components/ChatInput";
-import ChatMessage from "./components/ChatComponent";
+import ChatComponent from "./components/ChatComponent";
 
 function App() {
   return (
@@ -10,7 +10,7 @@ function App() {
       </div>
       <div style={{ marginTop: '200px', marginBottom: '50px', overflow: 'hidden',position:'sticky' }}>
         <div style={{ maxHeight: 'calc(100vh - 280px)', overflowY: 'auto' }}>
-          <ChatMessage />
+          <ChatComponent />
         </div>
       </div>
       <div style={{ position: 'fixed', bottom: 10,left:20,right:20, zIndex: 1 }}>
